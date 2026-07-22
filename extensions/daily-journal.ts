@@ -278,9 +278,9 @@ function renderDigestForLLM(sessions: SessionDigest[]): string {
       minute: "2-digit",
     });
     lines.push(`\n## Session @ ${time} — ${projectName}`);
-    lines.push(`路径: ${s.cwd || "(unknown)"}`);
+    lines.push(`Path: ${s.cwd || "(unknown)"}`);
     for (const t of s.turns) {
-      const who = t.role === "user" ? "我" : "助手";
+      const who = t.role === "user" ? "Me" : "Assistant";
       lines.push(`- **${who}**: ${t.text}`);
     }
   }
@@ -292,7 +292,7 @@ function renderDigestForLLM(sessions: SessionDigest[]): string {
 // ---------------------------------------------------------------------------
 export default function (pi: ExtensionAPI) {
   pi.registerCommand("daily", {
-    description: "把某一天所有 pi 会话总结成一篇日记（默认今天，可 /daily YYYY-MM-DD 指定日期）",
+    description: "Summarize all pi sessions from a given day into a journal entry (defaults to today; use /daily YYYY-MM-DD to specify a date)",
     getArgumentCompletions: (prefix: string) => {
       // Offer today and the previous few days as suggestions.
       const items: Array<{ value: string; label: string }> = [];
@@ -300,7 +300,7 @@ export default function (pi: ExtensionAPI) {
         const d = new Date();
         d.setDate(d.getDate() - i);
         const value = localDateString(d);
-        const label = i === 0 ? `${value}（今天）` : i === 1 ? `${value}（昨天）` : value;
+        const label = i === 0 ? `${value} (today)` : i === 1 ? `${value} (yesterday)` : value;
         items.push({ value, label });
       }
       const filtered = items.filter((it) => it.value.startsWith(prefix));
@@ -312,13 +312,13 @@ export default function (pi: ExtensionAPI) {
       const targetDate = parseDateArg(args);
       if (targetDate === null) {
         ctx.ui.notify(
-          `无法识别日期 "${args.trim()}"，请使用 /daily YYYY-MM-DD 格式（如 /daily 2026-07-08）。`,
+          `Unrecognized date "${args.trim()}". Please use the /daily YYYY-MM-DD format (e.g. /daily 2026-07-08).`,
           "error",
         );
         return;
       }
 
-      ctx.ui.setStatus("daily-journal", `扫描 ${config.inputDir} 中 ${targetDate} 的会话…`);
+      ctx.ui.setStatus("daily-journal", `Scanning ${config.inputDir} for sessions on ${targetDate}…`);
 
       let sessions: SessionDigest[];
       try {
@@ -326,7 +326,7 @@ export default function (pi: ExtensionAPI) {
       } catch (err) {
         ctx.ui.setStatus("daily-journal", "");
         ctx.ui.notify(
-          `扫描会话失败: ${err instanceof Error ? err.message : String(err)}`,
+          `Failed to scan sessions: ${err instanceof Error ? err.message : String(err)}`,
           "error",
         );
         return;
@@ -336,7 +336,7 @@ export default function (pi: ExtensionAPI) {
 
       if (sessions.length === 0) {
         ctx.ui.notify(
-          `没有找到 ${targetDate}（本地日期）的会话（已排除当前日记目录）。`,
+          `No sessions found for ${targetDate} (local date) — the current journal directory is excluded.`,
           "warn",
         );
         return;
@@ -363,24 +363,24 @@ export default function (pi: ExtensionAPI) {
 
       const totalTurns = sessions.reduce((n, s) => n + s.turns.length, 0);
       ctx.ui.notify(
-        `找到 ${sessions.length} 个会话、${totalTurns} 段对话，正在生成日记…`,
+        `Found ${sessions.length} session(s) and ${totalTurns} conversation segment(s). Generating journal…`,
         "info",
       );
 
       const prompt = [
-        `请根据下面从 ${targetDate} 这一天所有 pi 编码会话中抽取的精简对话记录，`,
-        `写一篇自然、连贯的中文工作日记，保存到文件：\n\`${outputFile}\``,
+        `Based on the condensed conversation records extracted below from all pi coding sessions on ${targetDate},`,
+        `write a natural, coherent work journal in English and save it to the file:\n\`${outputFile}\``,
         ``,
-        `要求：`,
-        `1. 用第一人称，像日记一样叙述这一天做了哪些事、遇到什么问题、如何解决。`,
-        `2. 按项目/会话分组，突出重点，不要逐条罗列对话。`,
-        `3. 顶部写一个 Markdown 一级标题：\`# ${targetDate}\`，并在其后简要概述这一天。`,
-        `4. 使用 write 工具把最终内容写入上面的文件路径（覆盖）。`,
+        `Requirements:`,
+        `1. Use the first person, narrating like a diary what was done that day, what problems came up, and how they were solved.`,
+        `2. Group by project/session, highlight the key points, and do not list conversations item by item.`,
+        `3. At the top, add a Markdown level-1 heading: \`# ${targetDate}\`, followed by a brief summary of the day.`,
+        `4. Use the write tool to write the final content to the file path above (overwrite).`,
         existing
-          ? `5. 该文件已存在以下内容，如果其中有用户手写的笔记，请尽量保留融合：\n\n<existing>\n${existing}\n</existing>`
+          ? `5. The file already contains the following content; if it includes any hand-written notes from the user, try to preserve and merge them:\n\n<existing>\n${existing}\n</existing>`
           : ``,
         ``,
-        `以下是该日各会话的精简记录：`,
+        `Below are the condensed records of each session for that day:`,
         digest,
       ]
         .filter(Boolean)
