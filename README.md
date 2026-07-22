@@ -13,7 +13,8 @@ Great for keeping an Obsidian-style daily journal of what you worked on.
 - 💰 **Token-efficient**: streams each `.jsonl` line-by-line and keeps only user/assistant text, dropping reasoning, tool calls, tool results, and images. Per-session caps keep the digest small.
 - 🚫 Excludes sessions whose working directory **is your journal folder itself**, so the diary doesn't summarize its own generation.
 - 🌏 Matches days by your **local** date (session filenames are UTC timestamps and are converted before comparison).
-- ⚙️ Simple config: just an input dir and an output dir.
+- ⚙️ Simple config: input dir, output dir, and journal language.
+- 🌐 Write your journal in any language (`English`, `中文`, …) via the `language` option.
 - ⌨️ Argument autocompletion suggests the last 7 days.
 
 ## Install
@@ -50,12 +51,13 @@ Typing `/daily ` and triggering completion will suggest the last 7 days.
 
 ## Configuration
 
-The first version keeps configuration intentionally minimal — just two fields:
+Configuration is intentionally minimal — three fields:
 
 | Field       | Meaning                                                        | Default                       |
 | ----------- | ------------------------------------------------------------- | ----------------------------- |
 | `inputDir`  | Directory containing pi session folders (each with `.jsonl`). | `~/.pi/agent/sessions`        |
 | `outputDir` | Where the daily `YYYY-MM-DD.md` files are written.            | current working directory     |
+| `language`  | Language the journal is written in (e.g. `English`, `中文`).   | `English`                     |
 
 `~` is expanded to your home directory. A relative `outputDir` is resolved against the current working directory; an empty `outputDir` means "write into the current working directory".
 
@@ -70,7 +72,8 @@ Example `~/.pi/agent/daily-journal.json`:
 ```json
 {
   "inputDir": "~/.pi/agent/sessions",
-  "outputDir": "~/Documents/daily"
+  "outputDir": "~/Documents/daily",
+  "language": "中文"
 }
 ```
 

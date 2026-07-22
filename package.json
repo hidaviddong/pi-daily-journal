@@ -14,7 +14,7 @@
   "license": "MIT",
   "author": "hidaviddong",
   "files": [
-    "extensions",
+    "index.ts",
     "daily-journal.example.json",
     "README.md",
     "LICENSE"
@@ -32,7 +32,7 @@
   },
   "pi": {
     "extensions": [
-      "./extensions/daily-journal.ts"
+      "./index.ts"
     ]
   },
   "peerDependencies": {

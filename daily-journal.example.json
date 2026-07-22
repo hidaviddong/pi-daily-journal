@@ -1,4 +1,5 @@
 {
   "inputDir": "~/.pi/agent/sessions",
-  "outputDir": ""
+  "outputDir": "",
+  "language": "English"
 }

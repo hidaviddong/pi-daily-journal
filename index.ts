@@ -17,12 +17,15 @@ interface JournalConfig {
   inputDir: string;
   /** Directory where the daily journal markdown files are written. */
   outputDir: string;
+  /** Language the journal should be written in (e.g. "English", "中文"). */
+  language: string;
 }
 
 const DEFAULT_CONFIG: JournalConfig = {
   inputDir: join(homedir(), ".pi", "agent", "sessions"),
   // Empty means "current working directory" and is resolved at run time.
   outputDir: "",
+  language: "English",
 };
 
 function expandHome(p: string): string {
@@ -62,6 +65,10 @@ function mergeConfigFile(base: JournalConfig, path: string): JournalConfig {
     return {
       inputDir: typeof raw.inputDir === "string" && raw.inputDir ? raw.inputDir : base.inputDir,
       outputDir: typeof raw.outputDir === "string" ? raw.outputDir : base.outputDir,
+      language:
+        typeof raw.language === "string" && raw.language.trim()
+          ? raw.language.trim()
+          : base.language,
     };
   } catch {
     return base;
@@ -369,7 +376,9 @@ export default function (pi: ExtensionAPI) {
 
       const prompt = [
         `Based on the condensed conversation records extracted below from all pi coding sessions on ${targetDate},`,
-        `write a natural, coherent work journal in English and save it to the file:\n\`${outputFile}\``,
+        `write a natural, coherent work journal in ${config.language} and save it to the file:\n\`${outputFile}\``,
+        ``,
+        `IMPORTANT: Write the entire journal (headings, summary, and body) in ${config.language}.`,
         ``,
         `Requirements:`,
         `1. Use the first person, narrating like a diary what was done that day, what problems came up, and how they were solved.`,
