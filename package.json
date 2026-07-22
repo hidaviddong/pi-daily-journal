@@ -10,10 +10,10 @@
     "sessions"
   ],
   "license": "MIT",
-  "author": "daviddong",
+  "author": "hidaviddong",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/daviddong/pi-daily-journal.git"
+    "url": "git+https://github.com/hidaviddong/pi-daily-journal.git"
   },
   "pi": {
     "extensions": [
