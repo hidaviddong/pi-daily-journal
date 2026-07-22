@@ -4,7 +4,9 @@
   "description": "A pi extension that summarizes your pi coding sessions from a given day into a natural-language diary entry.",
   "keywords": [
     "pi-package",
+    "pi-coding-agent",
     "pi-extension",
+    "extension",
     "journal",
     "diary",
     "sessions"
