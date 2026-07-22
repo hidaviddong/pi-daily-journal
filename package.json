@@ -1,0 +1,26 @@
+{
+  "name": "pi-daily-journal",
+  "version": "0.1.0",
+  "description": "A pi extension that summarizes your pi coding sessions from a given day into a natural-language diary entry.",
+  "keywords": [
+    "pi-package",
+    "pi-extension",
+    "journal",
+    "diary",
+    "sessions"
+  ],
+  "license": "MIT",
+  "author": "daviddong",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/daviddong/pi-daily-journal.git"
+  },
+  "pi": {
+    "extensions": [
+      "./extensions/daily-journal.ts"
+    ]
+  },
+  "peerDependencies": {
+    "@earendil-works/pi-coding-agent": "*"
+  }
+}
