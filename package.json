@@ -1,6 +1,6 @@
 {
   "name": "pi-daily-journal",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "A pi extension that summarizes your pi coding sessions from a given day into a natural-language diary entry.",
   "keywords": [
     "pi-package",
