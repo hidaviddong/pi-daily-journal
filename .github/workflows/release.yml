@@ -19,11 +19,18 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
           registry-url: 'https://registry.npmjs.org'
+
+      # npm >= 11.5 is required for OIDC trusted publishing auth.
+      - name: Upgrade npm
+        run: npm install -g npm@latest
 
       - name: Install dependencies
         run: npm ci
 
+      # Authenticates via OIDC Trusted Publishing (no token needed).
+      # Requires a Trusted Publisher configured on npmjs.com for this repo
+      # and the `id-token: write` permission above.
       - name: Publish to npm
         run: npm publish
