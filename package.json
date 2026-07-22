@@ -11,6 +11,19 @@
   ],
   "license": "MIT",
   "author": "hidaviddong",
+  "files": [
+    "extensions",
+    "daily-journal.example.json",
+    "README.md",
+    "LICENSE"
+  ],
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  },
+  "scripts": {
+    "release": "bumpp"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/hidaviddong/pi-daily-journal.git"
@@ -22,5 +35,8 @@
   },
   "peerDependencies": {
     "@earendil-works/pi-coding-agent": "*"
+  },
+  "devDependencies": {
+    "bumpp": "^12.0.0"
   }
 }
